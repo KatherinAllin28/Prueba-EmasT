@@ -61,3 +61,90 @@ GROUP BY p.item_id
 ORDER BY total_prestamos DESC
 LIMIT 1;
 ```
+
+## Parte 3
+
+#### Diagrama de clases UML
+
+<img width="1110" height="723" alt="image" src="https://github.com/user-attachments/assets/9c4d3995-b289-47e9-89f5-e84d7643af6d" />
+
+#### Descripción de funcionalidad
+La funcionalidad de "agregar al carrito" implica los siguientes pasos y lógica:
+- Identificación del Usuario y Carrito: Cuando un usuario (autenticado o invitado) desea agregar un producto, el sistema primero identifica si el usuario ya tiene un carrito de compras activo.
+- Selección del Producto y Cantidad: El usuario selecciona un Producto específico y la cantidad deseada.
+- Verificación de Stock: Antes de agregar, el sistema verifica si la cantidad solicitada está disponible en el stock del Producto. Si no hay suficiente stock, se notifica al usuario.
+- Actualización del Carrito
+- Actualización de la Interfaz de Usuario: La interfaz de usuario se actualiza para reflejar el nuevo contenido del carrito (ej. un contador de ítems en el icono del carrito).
+
+#### Esquema base de datos
+Tabla usuarios
+
+```sql
+CREATE TABLE IF NOT EXISTS usuarios (
+    id_usuario INTEGER PRIMARY KEY AUTOINCREMENT,
+    nombre_usuario TEXT NOT NULL UNIQUE,
+    email TEXT NOT NULL UNIQUE,
+    contrasena_hash TEXT NOT NULL,
+    direccion TEXT,
+    telefono TEXT,
+    fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+```
+
+Tabla productos
+
+```sql
+CREATE TABLE IF NOT EXISTS productos (
+    id_producto INTEGER PRIMARY KEY AUTOINCREMENT,
+    nombre TEXT NOT NULL,
+    descripcion TEXT,
+    precio REAL NOT NULL,
+    stock INTEGER NOT NULL,
+    categoria TEXT,
+    url_imagen TEXT
+);
+```
+
+Tabla carritos
+
+```sql
+CREATE TABLE IF NOT EXISTS carritos (
+    id_carrito INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_usuario INTEGER,
+    fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP,
+    fecha_ultima_actualizacion DATETIME DEFAULT CURRENT_TIMESTAMP,
+    estado TEXT DEFAULT 'activo', -- 'activo', 'comprado', 'abandonado'
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
+);
+```
+
+Tabla ordenes
+
+```sql
+CREATE TABLE IF NOT EXISTS ordenes (
+    id_orden INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_usuario INTEGER NOT NULL,
+    fecha_orden DATETIME DEFAULT CURRENT_TIMESTAMP,
+    estado TEXT DEFAULT 'pendiente', -- 'pendiente', 'procesando', 'enviado', 'entregado', 'cancelado'
+    total_orden REAL NOT NULL,
+    direccion_envio TEXT NOT NULL,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
+);
+
+```
+
+Tabla pagos
+
+```sql
+CREATE TABLE IF NOT EXISTS pagos (
+    id_pago INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_orden INTEGER NOT NULL UNIQUE, 
+    metodo_pago TEXT NOT NULL,
+    monto REAL NOT NULL,
+    fecha_pago DATETIME DEFAULT CURRENT_TIMESTAMP,
+    estado TEXT DEFAULT 'pendiente', -- 'aprobado', 'rechazado', 'pendiente'
+    transaccion_id TEXT,
+    FOREIGN KEY (id_orden) REFERENCES ordenes(id_orden)
+);
+```
