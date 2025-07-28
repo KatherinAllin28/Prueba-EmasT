@@ -46,9 +46,13 @@ Listar los ítems prestados actualmente
 `WHERE p.fecha_devolucion_real IS NULL;`
 
 Calcular el ítem más prestado
-`SELECT i.titulo, i.tipo, COUNT(p.item_id) AS total_prestamos`
-`FROM prestamos p`
-`JOIN items i ON p.item_id = i.id`
-`GROUP BY p.item_id`
-`ORDER BY total_prestamos DESC`
-`LIMIT 1;`
+
+```python
+
+SELECT i.titulo, i.tipo, COUNT(p.item_id) AS total_prestamos
+FROM prestamos p
+JOIN items i ON p.item_id = i.id
+GROUP BY p.item_id
+ORDER BY total_prestamos DESC
+LIMIT 1;
+
