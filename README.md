@@ -37,24 +37,23 @@ Al ejecutar la aplicación visibilizamos lo siguiente:
 Listar todos los ítems disponibles
 
 ```python
-
 SELECT id, tipo, titulo, autor_editor, cantidad_disponible
 FROM items
 WHERE cantidad_disponible > 0;
 
+
 Listar los ítems prestados actualmente
 
 ```python
-
 SELECT p.id, i.titulo, i.tipo, p.prestatario, p.fecha_prestamo, p.fecha_devolucion_esperada
 FROM prestamos p
 JOIN items i ON p.item_id = i.id
 WHERE p.fecha_devolucion_real IS NULL;
 
+
 Calcular el ítem más prestado
 
 ```python
-
 SELECT i.titulo, i.tipo, COUNT(p.item_id) AS total_prestamos
 FROM prestamos p
 JOIN items i ON p.item_id = i.id
