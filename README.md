@@ -36,28 +36,28 @@ Al ejecutar la aplicación visibilizamos lo siguiente:
 ### Consultas SQL solicitadas
 Listar todos los ítems disponibles
 
-```python
+```sql
 SELECT id, tipo, titulo, autor_editor, cantidad_disponible
 FROM items
 WHERE cantidad_disponible > 0;
-
+```
 
 Listar los ítems prestados actualmente
 
-```python
+```sql
 SELECT p.id, i.titulo, i.tipo, p.prestatario, p.fecha_prestamo, p.fecha_devolucion_esperada
 FROM prestamos p
 JOIN items i ON p.item_id = i.id
 WHERE p.fecha_devolucion_real IS NULL;
-
+```
 
 Calcular el ítem más prestado
 
-```python
+```sql
 SELECT i.titulo, i.tipo, COUNT(p.item_id) AS total_prestamos
 FROM prestamos p
 JOIN items i ON p.item_id = i.id
 GROUP BY p.item_id
 ORDER BY total_prestamos DESC
 LIMIT 1;
-
+```
