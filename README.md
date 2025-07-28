@@ -34,16 +34,22 @@ Al ejecutar la aplicación visibilizamos lo siguiente:
 <img width="650" height="567" alt="image" src="https://github.com/user-attachments/assets/9621357d-ef36-47dd-8b3d-ec40e13c3a43" />
 
 ### Consultas SQL solicitadas
-Listar todos los ítems disponibles 
-`SELECT id, tipo, titulo, autor_editor, cantidad_disponible`
-`FROM items`
-`WHERE cantidad_disponible > 0;`
+Listar todos los ítems disponibles
+
+```python
+
+SELECT id, tipo, titulo, autor_editor, cantidad_disponible
+FROM items
+WHERE cantidad_disponible > 0;
 
 Listar los ítems prestados actualmente
-`SELECT p.id, i.titulo, i.tipo, p.prestatario, p.fecha_prestamo, p.fecha_devolucion_esperada`
-`FROM prestamos p`
-`JOIN items i ON p.item_id = i.id`
-`WHERE p.fecha_devolucion_real IS NULL;`
+
+```python
+
+SELECT p.id, i.titulo, i.tipo, p.prestatario, p.fecha_prestamo, p.fecha_devolucion_esperada
+FROM prestamos p
+JOIN items i ON p.item_id = i.id
+WHERE p.fecha_devolucion_real IS NULL;
 
 Calcular el ítem más prestado
 
